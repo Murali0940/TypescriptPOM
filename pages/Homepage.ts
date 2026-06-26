@@ -145,7 +145,7 @@ export class Homepage extends BasePage {
         // Wait until the new tab is loaded
         await childPage.waitForLoadState("load");
 
-        Logger.info("Successfully switched to the new tab.");
+        Logger.info("Successfully switched to the new tab..");
 
         console.log("Parent URL :", parentPage.url());
         console.log("Child URL  :", childPage.url());

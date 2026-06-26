@@ -31,7 +31,7 @@ export class UserLoginPage extends BasePage {
         Logger.info('Current URL: ' + currentURL);
 
         if (currentURL.includes('https://www.alfadock-pack.com/userlogin.html')) {
-            Logger.pass("Successfully navigated to userlogin page");
+            Logger.pass("Successfully navigated to userlogin page.");
         } else {
             Logger.error(`Navigation failed. Current URL: ${currentURL}`);
         }

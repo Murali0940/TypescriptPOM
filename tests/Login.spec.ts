@@ -3,6 +3,7 @@ import { CompLoginPage } from '../pages/CompLoginPage';
 import { Logger } from '../utils/Logger';
 import { UserLoginPage } from '../pages/UserLoginPage';
 import { Config } from '../config/ConfigReader';
+import { Homepage } from '../pages/Homepage';
 
 test('Verify Company Login with Valid Credentials', async ({ page }) => {
 
@@ -24,9 +25,6 @@ test('Verify Company Login with Valid Credentials', async ({ page }) => {
         Logger.info('Login Button CSS Validated');
         await login.validatetitle();
         Logger.info('Title Validated');
-    });
-
-    await test.step('validating login success', async () => {
         Logger.info('Validating login success');
         await login.validateLoginSuccess();
     });
@@ -36,7 +34,18 @@ test('Verify Company Login with Valid Credentials', async ({ page }) => {
 
     const userlogin = new UserLoginPage(page);
 
+    await test.step('Enter user credentials', async () => {
+        Logger.info('Entering user username credentials');
+
+        const userusername = Config.userUsername;
+        Logger.info('User username entered');
+        const userpassword = Config.userPassword;
+        Logger.info('User password entered');
+        await userlogin.userLogin(userusername, userpassword);
+    });
+
     await test.step('UserLoginPageValidations', async () => {
+
         await userlogin.validateUserTitle();
         Logger.info('Title Validated');
         await userlogin.validateUserElements();
@@ -51,21 +60,104 @@ test('Verify Company Login with Valid Credentials', async ({ page }) => {
         Logger.info('Logout Button CSS Validated');
         await userlogin.validateCompanyLogoIsVisible();
         Logger.info('Company Logo Visibility Validated');
+
+        Logger.info('Validating login success');
+        await userlogin.validateUserLoginURL();
     });
 
-    await test.step('Enter user credentials', async () => {
-        Logger.info('Entering user username credentials');
 
-        const userusername = Config.userUsername;
-        Logger.info('User username entered');
-        const userpassword = Config.userPassword;
-        Logger.info('User password entered');
-        await userlogin.userLogin(userusername, userpassword);
+    Logger.info('==========Homepage==========');
 
-        await test.step('validating login success', async () => {
-            Logger.info('Validating login success');
-            await userlogin.validateHomepageURL();
-        });
+    const homepage = new Homepage(page);
+
+    await test.step('HomepageValidations', async () => {
+        await page.waitForTimeout(5000);
+        await homepage.validatealfaDOCKLogo();
+        await homepage.validateQRCodeIcon();
+        await homepage.validateSearchBox();
+        await homepage.validateSearchIcon();
+        await homepage.validateHyperlinkIcon();
+        await homepage.validateAlfaOfficeIcon();
+        await homepage.validateSettingsIcon();
+        await homepage.searchFile(".pdf");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForTimeout(5000);
+
     });
+
+    await test.step('search_pdf_file_in_searchbar', async () => {
+        await homepage.searchFile(".pdf");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForTimeout(5000);
+
+    });
+
+    await test.step('search_a3dasm_file_in_searchbar', async () => {
+        await homepage.searchFile(".a3dasm");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForTimeout(5000);
+    });
+
+    await test.step('search_a3dprt_file_in_searchbar', async () => {
+        await homepage.searchFile(".a3dprt");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForTimeout(5000);
+    });
+
+    await test.step('search_dwg_file_in_searchbar', async () => {
+        await homepage.searchFile(".dwg");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForTimeout(5000);
+    });
+
+    await test.step('search_dxf_file_in_searchbar', async () => {
+        await homepage.searchFile(".dxf");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForTimeout(5000);
+    });
+
+    await test.step('search_img_file_in_searchbar', async () => {
+        await homepage.searchFile(".img");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForTimeout(5000);
+    });
+
+    await test.step('search_png_file_in_searchbar', async () => {
+        await homepage.searchFile(".png");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForTimeout(5000);
+    });
+
+    await test.step('search_jpg_file_in_searchbar', async () => {
+        await homepage.searchFile(".jpg");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForTimeout(5000);
+    });
+
+    await test.step('search_docx_file_in_searchbar', async () => {
+        await homepage.searchFile(".docx");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForTimeout(5000);
+    });
+
+    await test.step('search_pptx_file_in_searchbar', async () => {
+        await homepage.searchFile(".pptx");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForTimeout(5000);
+    });
+
+    await test.step('search_csv_file_in_searchbar', async () => {
+        await homepage.searchFile(".csv");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForTimeout(5000);
+    });
+
+    await test.step('search_xlsx_file_in_searchbar', async () => {
+        await homepage.searchFile(".xlsx");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForTimeout(5000);
+    });
+
+    
 
 });

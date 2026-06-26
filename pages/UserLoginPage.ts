@@ -24,14 +24,14 @@ export class UserLoginPage extends BasePage {
 
 
 
-    async validateHomepageURL() {
+    async validateUserLoginURL() {
 
         const currentURL = this.page.url();
         console.log('Current URL:', currentURL);
         Logger.info('Current URL: ' + currentURL);
 
-        if (currentURL.includes('https://www.alfadock-pack.com/ver10/#/home')) {
-            Logger.pass("Successfully navigated to Home page.");
+        if (currentURL.includes('https://www.alfadock-pack.com/userlogin.html')) {
+            Logger.pass("Successfully navigated to userlogin page");
         } else {
             Logger.error(`Navigation failed. Current URL: ${currentURL}`);
         }

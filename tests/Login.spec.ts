@@ -1,0 +1,71 @@
+import { test, expect } from '@playwright/test';
+import { CompLoginPage } from '../pages/CompLoginPage';
+import { Logger } from '../utils/Logger';
+import { UserLoginPage } from '../pages/UserLoginPage';
+import { Config } from '../config/ConfigReader';
+
+test('Verify Company Login with Valid Credentials', async ({ page }) => {
+
+    Logger.info('==========CompanyLoginPage==========');
+
+    const login = new CompLoginPage(page);
+
+    await test.step('Perform Company Login', async () => {
+        await login.openURL(Config.appUrl);
+        await login.login(Config.companyUsername, Config.companyPassword);
+        await page.waitForLoadState('load');
+    });
+
+    await test.step('CompanyLoginPageValidations', async () => {
+
+        await login.validateelements();
+        Logger.info('Elements Validated');
+        await login.validateLoginButtonCSS();
+        Logger.info('Login Button CSS Validated');
+        await login.validatetitle();
+        Logger.info('Title Validated');
+    });
+
+    await test.step('validating login success', async () => {
+        Logger.info('Validating login success');
+        await login.validateLoginSuccess();
+    });
+
+
+    Logger.info('==========UserLoginPage==========');
+
+    const userlogin = new UserLoginPage(page);
+
+    await test.step('UserLoginPageValidations', async () => {
+        await userlogin.validateUserTitle();
+        Logger.info('Title Validated');
+        await userlogin.validateUserElements();
+        Logger.info('Elements Validated');
+        await userlogin.validateUserLoginButtonVisible();
+        Logger.info('Login Button Visibility Validated');
+        await userlogin.validateUserLogoutButtonVisible();
+        Logger.info('Logout Button Visibility Validated');
+        await userlogin.validateUserLoginButtonCSS();
+        Logger.info('Login Button CSS Validated');
+        await userlogin.validateUserLogoutButtonCSS();
+        Logger.info('Logout Button CSS Validated');
+        await userlogin.validateCompanyLogoIsVisible();
+        Logger.info('Company Logo Visibility Validated');
+    });
+
+    await test.step('Enter user credentials', async () => {
+        Logger.info('Entering user username credentials');
+
+        const userusername = Config.userUsername;
+        Logger.info('User username entered');
+        const userpassword = Config.userPassword;
+        Logger.info('User password entered');
+        await userlogin.userLogin(userusername, userpassword);
+
+        await test.step('validating login success', async () => {
+            Logger.info('Validating login success');
+            await userlogin.validateHomepageURL();
+        });
+    });
+
+});

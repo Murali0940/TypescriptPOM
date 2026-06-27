@@ -7,6 +7,8 @@ import { Homepage } from '../pages/Homepage';
 
 test('Verify Company Login with Valid Credentials', async ({ page }) => {
 
+    test.setTimeout(180000);
+
     Logger.info('==========CompanyLoginPage==========');
 
     const login = new CompLoginPage(page);
@@ -94,6 +96,95 @@ test('Verify Company Login with Valid Credentials', async ({ page }) => {
 
     await test.step('search_a3dasm_file_in_searchbar', async () => {
         await homepage.searchFile(".a3dasm");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
+
+    });
+
+    await test.step('search_a3dprt_file_in_searchbar', async () => {
+        await homepage.searchFile(".a3dprt");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
+
+    });
+
+    await test.step('search_tif_file_in_searchbar', async () => {
+        await homepage.searchFile(".tif");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
+
+    });
+
+    await test.step('search_TIF_file_in_searchbar', async () => {
+        await homepage.searchFile(".TIF");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
+
+    });
+
+    await test.step('search_docx_file_in_searchbar', async () => {
+        await homepage.searchFile(".docx");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
+
+    });
+
+    await test.step('search_tiff_xlsx_in_searchbar', async () => {
+        await homepage.searchFile(".xlsx");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
+
+    });
+
+    await test.step('search_pptx_file_in_searchbar', async () => {
+        await homepage.searchFile(".pptx");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
+
+    });
+
+    await test.step('search_dwg_file_in_searchbar', async () => {
+        await homepage.searchFile(".dwg");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
+
+    });
+
+    await test.step('search_dxf_file_in_searchbar', async () => {
+        await homepage.searchFile(".dxf");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
+
+    });
+
+    await test.step('search_png_file_in_searchbar', async () => {
+        await homepage.searchFile(".png");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
+
+    });
+
+
+    await test.step('search_jpg_file_in_searchbar', async () => {
+        await homepage.searchFile(".jpg");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
+
+    });
+
+    await test.step('search_csv_file_in_searchbar', async () => {
+        await homepage.searchFile(".csv");
         await homepage.selectAndDoubleClickFirstFile();
         await page.waitForLoadState('load');
         await homepage.alfaDOCKLogoClick();

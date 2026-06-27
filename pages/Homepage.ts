@@ -106,15 +106,16 @@ export class Homepage extends BasePage {
         await this.searchBox.clear();
         await this.searchBox.fill(searchText);
         await this.searchBox.press('Enter');
-        await this.page.waitForLoadState('domcontentloaded');
-        await this.file.first().waitFor({ state: 'visible' });
         Logger.info('Search completed for: ' + searchText);
+        await this.page.waitForLoadState('networkidle');
     }
 
     async selectAndDoubleClickFirstFile() {
 
         const firstImage = this.file.first();
+        firstImage.click();
         Logger.info("First file selected");
+        await this.page.waitForTimeout(3000);
 
         // Capture the parent page explicitly
         const parentPage = this.page;
@@ -125,13 +126,15 @@ export class Homepage extends BasePage {
             firstImage.dblclick()
         ]);
 
+        await this.page.waitForTimeout(5000);
+
         Logger.info("First file double-clicked");
 
         // Wait until the new tab is loaded
         await childPage.waitForLoadState("domcontentloaded");
         Logger.info("Successfully switched to the new tab..");
 
-        await this.page.waitForTimeout(5000);
+        await this.page.waitForLoadState('load');
 
         console.log("Parent URL :", parentPage.url());
         console.log("Child URL  :", childPage.url());
@@ -151,7 +154,7 @@ export class Homepage extends BasePage {
             Logger.error(`Unknown viewer opened: ${url}`);
         }
 
-        //await expect(this.page).toHaveURL(/regex/);
+        await this.page.waitForLoadState('domcontentloaded');
 
 
         // Close the new tab
@@ -169,7 +172,7 @@ export class Homepage extends BasePage {
 
         await this.alfaDOCKLogo.click();
         Logger.info("Clicked on alfaDOCK logo");
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForLoadState('domcontentloaded');
         await this.page.waitForLoadState('load');
 
     }

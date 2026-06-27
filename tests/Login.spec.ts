@@ -100,6 +100,14 @@ test('Verify Company Login with Valid Credentials', async ({ page }) => {
 
     });
 
+    await test.step('search_bmf_file_in_searchbar', async () => {
+        await homepage.searchFile(".bmf");
+        await homepage.selectAndDoubleClickFirstFile();
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
+
+    });
+
 
 
 

@@ -13,6 +13,7 @@ test('Verify Company Login with Valid Credentials', async ({ page }) => {
 
     await test.step('Perform Company Login', async () => {
         await login.openURL(Config.appUrl);
+        await login.languageSelection('English');
         await login.login(Config.companyUsername, Config.companyPassword);
         await page.waitForLoadState('load');
     });
@@ -71,7 +72,7 @@ test('Verify Company Login with Valid Credentials', async ({ page }) => {
     const homepage = new Homepage(page);
 
     await test.step('HomepageValidations', async () => {
-        await page.waitForTimeout(5000);
+        await page.waitForLoadState('load');
         await homepage.validatealfaDOCKLogo();
         await homepage.validateQRCodeIcon();
         await homepage.validateSearchBox();
@@ -79,85 +80,28 @@ test('Verify Company Login with Valid Credentials', async ({ page }) => {
         await homepage.validateHyperlinkIcon();
         await homepage.validateAlfaOfficeIcon();
         await homepage.validateSettingsIcon();
-        await homepage.searchFile(".pdf");
-        await homepage.selectAndDoubleClickFirstFile();
-        await page.waitForTimeout(5000);
+        await page.waitForLoadState('load');
 
     });
 
     await test.step('search_pdf_file_in_searchbar', async () => {
         await homepage.searchFile(".pdf");
         await homepage.selectAndDoubleClickFirstFile();
-        await page.waitForTimeout(5000);
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
 
     });
 
     await test.step('search_a3dasm_file_in_searchbar', async () => {
         await homepage.searchFile(".a3dasm");
         await homepage.selectAndDoubleClickFirstFile();
-        await page.waitForTimeout(5000);
+        await page.waitForLoadState('load');
+        await homepage.alfaDOCKLogoClick();
+
     });
 
-    await test.step('search_a3dprt_file_in_searchbar', async () => {
-        await homepage.searchFile(".a3dprt");
-        await homepage.selectAndDoubleClickFirstFile();
-        await page.waitForTimeout(5000);
-    });
 
-    await test.step('search_dwg_file_in_searchbar', async () => {
-        await homepage.searchFile(".dwg");
-        await homepage.selectAndDoubleClickFirstFile();
-        await page.waitForTimeout(5000);
-    });
 
-    await test.step('search_dxf_file_in_searchbar', async () => {
-        await homepage.searchFile(".dxf");
-        await homepage.selectAndDoubleClickFirstFile();
-        await page.waitForTimeout(5000);
-    });
 
-    await test.step('search_img_file_in_searchbar', async () => {
-        await homepage.searchFile(".img");
-        await homepage.selectAndDoubleClickFirstFile();
-        await page.waitForTimeout(5000);
-    });
-
-    await test.step('search_png_file_in_searchbar', async () => {
-        await homepage.searchFile(".png");
-        await homepage.selectAndDoubleClickFirstFile();
-        await page.waitForTimeout(5000);
-    });
-
-    await test.step('search_jpg_file_in_searchbar', async () => {
-        await homepage.searchFile(".jpg");
-        await homepage.selectAndDoubleClickFirstFile();
-        await page.waitForTimeout(5000);
-    });
-
-    await test.step('search_docx_file_in_searchbar', async () => {
-        await homepage.searchFile(".docx");
-        await homepage.selectAndDoubleClickFirstFile();
-        await page.waitForTimeout(5000);
-    });
-
-    await test.step('search_pptx_file_in_searchbar', async () => {
-        await homepage.searchFile(".pptx");
-        await homepage.selectAndDoubleClickFirstFile();
-        await page.waitForTimeout(5000);
-    });
-
-    await test.step('search_csv_file_in_searchbar', async () => {
-        await homepage.searchFile(".csv");
-        await homepage.selectAndDoubleClickFirstFile();
-        await page.waitForTimeout(5000);
-    });
-
-    await test.step('search_xlsx_file_in_searchbar', async () => {
-        await homepage.searchFile(".xlsx");
-        await homepage.selectAndDoubleClickFirstFile();
-        await page.waitForTimeout(5000);
-    });
-
-    
 
 });

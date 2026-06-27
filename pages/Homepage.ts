@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Logger } from "../utils/Logger";
 
@@ -11,6 +11,7 @@ export class Homepage extends BasePage {
     readonly hyperlinkIcon: Locator;
     readonly alfaOfficeIcon: Locator;
     readonly settingsicon: Locator;
+    readonly file: Locator;
 
 
     //locators
@@ -22,82 +23,66 @@ export class Homepage extends BasePage {
         super(page);
 
 
-        this.alfaDOCKLogo = this.page.locator("img[src*='logo']");
+        this.alfaDOCKLogo = this.page.locator("//img[@src='assets/icons/logo.png']");
         this.qrCodeIcon = this.page.locator("//img[@src='assets/qr-code.png']");
-        this.searchBox = this.page.locator("input[placeholder='Search'], input[placeholder='検索']");
-        this.searchIcon = this.page.locator("//img[@src='assets/search.png']");
-        this.hyperlinkIcon = this.page.locator("//img[contains(@src,'hyperLink')]");
-        this.alfaOfficeIcon = this.page.locator("//img[contains(@src,'alfa')]");
-        this.settingsicon = this.page.locator("//img[contains(@src,'Setting')]");
+        this.searchBox = page.locator("input[placeholder='Search'], input[placeholder='検索']");
+        this.searchIcon = this.page.locator("//img[@src='assets/ai-search.png']");
+        this.hyperlinkIcon = this.page.locator("//input[@src='assets/icons/hyperLink.png']");
+        this.alfaOfficeIcon = this.page.locator("//input[@src='assets/icons/alfa Office.png']");
+        this.settingsicon = this.page.locator("//input[@src='assets/icons/Setting Icon.png']");
+        this.file = this.page.locator("div.imageDiv");
     }
 
     //validate
 
+
+
     async validatealfaDOCKLogo() {
         Logger.info('Validating alfaDOCK logo visibility');
-        if (await this.alfaDOCKLogo.isVisible()) {
-            Logger.pass('alfaDOCK logo is visible');
-        } else {
-            Logger.error('alfaDOCK logo is not visible');
-        }
+
+        await expect(this.alfaDOCKLogo).toBeVisible({ timeout: 10000 });
+
+        Logger.pass('alfaDOCK logo is visible');
     }
 
     async validateQRCodeIcon() {
         Logger.info('Validating QR code icon visibility');
-        if (await this.qrCodeIcon.isVisible()) {
-            Logger.pass('QR code icon is visible');
-        } else {
-            Logger.error('QR code icon is not visible');
-        }
-
+        await expect(this.qrCodeIcon).toBeVisible({ timeout: 10000 });
+        Logger.pass('QR code icon is visible');
     }
+
 
     async validateSearchBox() {
         Logger.info('Validating search box visibility');
-        if (await this.searchBox.isVisible()) {
-            Logger.pass('Search box is visible');
-        } else {
-            Logger.error('Search box is not visible');
-        }
+        await expect(this.searchBox).toBeVisible({ timeout: 10000 });
+        Logger.pass('Search box is visible');
     }
 
     async validateSearchIcon() {
         Logger.info('Validating search icon visibility');
-        if (await this.searchIcon.isVisible()) {
-            Logger.pass('Search icon is visible');
-        } else {
-            Logger.error('Search icon is not visible');
-        }
+        await expect(this.searchIcon).toBeVisible({ timeout: 10000 });
+        Logger.pass('Search icon is visible');
     }
 
     async validateHyperlinkIcon() {
         Logger.info('Validating hyperlink icon visibility');
-        if (await this.hyperlinkIcon.isVisible()) {
-            Logger.pass('Hyperlink icon is visible');
-        } else {
-            Logger.error('Hyperlink icon is not visible');
-        }
+        await expect(this.hyperlinkIcon).toBeVisible({ timeout: 10000 });
+        Logger.pass('Hyperlink icon is visible');
     }
 
     async validateAlfaOfficeIcon() {
         Logger.info('Validating alfaOffice icon visibility');
-        if (await this.alfaOfficeIcon.isVisible()) {
-            Logger.pass('alfaOffice icon is visible');
-        } else {
-            Logger.error('alfaOffice icon is not visible');
-        }
+        await expect(this.alfaOfficeIcon).toBeVisible({ timeout: 10000 });
+        Logger.pass('alfaOffice icon is visible');
     }
 
     async validateSettingsIcon() {
         Logger.info('Validating settings icon visibility');
-        await this.settingsicon.isVisible();
-        if (await this.settingsicon.isVisible()) {
-            Logger.pass('Settings icon is visible');
-        } else {
-            Logger.error('Settings icon is not visible');
-        }
-
+        await expect(this.settingsicon).toBeVisible({ timeout: 10000 });
+        Logger.pass('Settings icon is visible');
     }
+
+
 
     async validateHomepageURL() {
 
@@ -121,37 +106,35 @@ export class Homepage extends BasePage {
         await this.searchBox.clear();
         await this.searchBox.fill(searchText);
         await this.searchBox.press('Enter');
-        await this.page.waitForLoadState('load');
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForLoadState('domcontentloaded');
+        await this.file.first().waitFor({ state: 'visible' });
         Logger.info('Search completed for: ' + searchText);
     }
 
     async selectAndDoubleClickFirstFile() {
 
-        await this.page.waitForTimeout(10000);
-
-        const firstImage = this.page.locator("div.imageDiv").first();
+        const firstImage = this.file.first();
         Logger.info("First file selected");
 
+        // Capture the parent page explicitly
         const parentPage = this.page;
 
+        // Wait for new tab to open after double-click
         const [childPage] = await Promise.all([
-            this.page.context().waitForEvent("page"),
+            parentPage.context().waitForEvent("page"),
             firstImage.dblclick()
         ]);
 
         Logger.info("First file double-clicked");
 
         // Wait until the new tab is loaded
-        await childPage.waitForLoadState("load");
-
+        await childPage.waitForLoadState("domcontentloaded");
         Logger.info("Successfully switched to the new tab..");
+
+        await this.page.waitForTimeout(5000);
 
         console.log("Parent URL :", parentPage.url());
         console.log("Child URL  :", childPage.url());
-
-        console.log("Parent Title:", await parentPage.title());
-        console.log("Child Title :", await childPage.title());
 
         // Validate the viewer
         const url = childPage.url().toLowerCase();
@@ -168,6 +151,9 @@ export class Homepage extends BasePage {
             Logger.error(`Unknown viewer opened: ${url}`);
         }
 
+        //await expect(this.page).toHaveURL(/regex/);
+
+
         // Close the new tab
         await childPage.close();
         Logger.info("Child tab closed");
@@ -175,29 +161,17 @@ export class Homepage extends BasePage {
         // Bring the parent tab to the front
         await parentPage.bringToFront();
         Logger.info("Returned to parent tab");
+
+        await this.page.waitForLoadState('load');
     }
 
-    async validateViewerOpened(childPage: Page) {
+    async alfaDOCKLogoClick() {
 
-        const url = childPage.url().toLowerCase();
+        await this.alfaDOCKLogo.click();
+        Logger.info("Clicked on alfaDOCK logo");
+        await this.page.waitForTimeout(2000);
+        await this.page.waitForLoadState('load');
 
-        Logger.info(`Viewer URL: ${url}`);
-
-        if (url.includes("pdfviewer")) {
-            Logger.pass("PDF Viewer opened successfully.");
-        }
-        else if (url.includes("a3dviewer")) {
-            Logger.pass("A3D Viewer opened successfully.");
-        }
-        else if (url.includes("drawing")) {
-            Logger.pass("Drawing Viewer opened successfully.");
-        }
-        else if (url.includes("csvviewer")) {
-            Logger.pass("CSV Viewer opened successfully.");
-        }
-        else {
-            throw new Error(`Unknown viewer opened. URL: ${url}`);
-        }
     }
 
 

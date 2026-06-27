@@ -7,15 +7,25 @@ export class CompLoginPage extends BasePage {
         super(page);
     }
 
+
     private username: string = "#username";
     private password: string = "#password";
     private loginButton: string = "#logmein";
+    private lang: string = "#mySelect";
 
     async openURL(url: string) {
         await this.open(url);
         Logger.info('Navigated to URL: ' + url);
     }
-    
+
+    async languageSelection(language: string) {
+        Logger.info('Selecting language: ' + language);
+         const langSelector = this.page.locator(this.lang);
+         await langSelector.selectOption("English");
+         Logger.info('Language selected: ' + language);
+         await langSelector.click();
+    }
+
 
     async login(user: string, pass: string) {
         await this.type(this.username, user);
